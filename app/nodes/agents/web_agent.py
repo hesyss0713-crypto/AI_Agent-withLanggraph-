@@ -1,19 +1,22 @@
+import json
 from typing import Callable, Dict
 from app.state import AgentState, extract_json
+from app.services.stocks import format_stock_result
 
 
 def make_stock_handler(run_llm: Callable, get_prompt: Callable, stock_client: Callable):
     def handle(state: AgentState) -> AgentState:
         system_prompt = get_prompt("stock_api")
         raw = run_llm(system_prompt, state["user_input"])
-        print(f"[RAW] : {raw}")
         params = extract_json(raw)
-        print(f"[params] : {params}")
+        print(f"[PARAMS] : {params}")
 
         try:
             api_result = stock_client(params)
-            print(f"[API_RESULT] : {api_result}")
-            return {"web_data": f"[Stock API] {params.get('q')}: {api_result}"}
+            formatted = format_stock_result(api_result)
+            
+            return {"web_data": formatted}
+        
         except Exception as e:
             return {"web_data": f"[Stock API] 호출 실패: {e}"}
 
