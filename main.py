@@ -6,7 +6,7 @@ if __name__ == "__main__":
     try:
         app = build_app()
 
-        init_state: AgentState = {"user_input": "오늘 공고 뜬거 보여줘."}
+        init_state: AgentState = {"user_input": "오늘 테슬라 주가 확인해봐"}
         result = app.invoke(init_state)
         print(f"Final Intent: {result.get('final_intent')}")
         print(f"Web Data: {result.get('web_data')}")

@@ -1,0 +1,43 @@
+# Secrets / Environment
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.egg-info/
+venv/
+.venv/
+env/
+
+# Tests / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
+*.pid
+
+# LLM / Cache
+.cache/
+.huggingface/
+hf_cache/
+outputs/
+runs/
