@@ -30,7 +30,16 @@ def make_agg_router(keyword_rules: Dict[str, Dict[str, list]]):
             }
 
         text = state["user_input"].lower()
-        determined_intent = "general_lookup"
+        # When the Source Router is confident about the source, we should still route
+        # into that source even if no keyword rule matches. Start with a source-level
+        # default intent, then optionally refine via keyword matches.
+        default_by_source = {
+            "web": "fetch_news",
+            "code": "explain_code",
+            "policy": "summarize_policy",
+            "general": "general_lookup",
+        }
+        determined_intent = default_by_source.get(source, "general_lookup")
 
         category_rules = keyword_rules.get(source, {})
         for intent, keywords in category_rules.items():

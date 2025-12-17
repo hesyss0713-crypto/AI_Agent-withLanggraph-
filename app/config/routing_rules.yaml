@@ -1,6 +1,7 @@
 web:
   fetch_news:
     - "뉴스"
+    - "news"
     - "headline"
     - "헤드라인"
     - "속보"

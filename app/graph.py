@@ -3,12 +3,18 @@ from langgraph.graph import StateGraph, END
 from app.state import AgentState
 from app.nodes.llm import load_llm, make_llm_runner
 from app.nodes.routing import make_source_router, make_agg_router
-from app.nodes.agents.web_agent import make_web_agent, make_stock_handler, make_simple_handler
+from app.nodes.agents.web_agent import (
+    make_web_agent,
+    make_stock_handler,
+    make_news_handler,
+    make_simple_handler,
+)
 from app.nodes.agents.code_agent import code_agent
 from app.nodes.agents.policy_agent import policy_agent
 from app.nodes.agents.supervisor import make_supervisor
 from app.config import get_prompt, load_routing_rules
 from app.services.stocks import fetch_stocks
+from app.services.news import fetch_news
 
 
 def build_app(model_id: str = "meta-llama/Llama-3.2-3B-Instruct"):
@@ -24,7 +30,7 @@ def build_app(model_id: str = "meta-llama/Llama-3.2-3B-Instruct"):
     graph.add_node("supervisor", make_supervisor(get_prompt, run_llm))
     web_handlers = {
         "fetch_stocks": make_stock_handler(run_llm, get_prompt, fetch_stocks),
-        "fetch_news": make_simple_handler("[Web API] 오늘의 주요 뉴스를 가져왔습니다."),
+        "fetch_news": make_news_handler(run_llm, get_prompt, fetch_news),
         "fetch_jobs": make_simple_handler("[Web API] 최신 채용 공고를 가져왔습니다."),
     }
     graph.add_node("web_agent", make_web_agent(run_llm, get_prompt, web_handlers))

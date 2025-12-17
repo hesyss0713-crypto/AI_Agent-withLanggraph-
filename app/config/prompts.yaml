@@ -207,3 +207,44 @@ stock_api:
     - Output MUST contain ONLY the JSON object.
     - Never explain your reasoning.
     - Never omit the exchange for stocks.
+
+news_api:
+  name: "Web_news API"
+  system: |
+    Your ONLY task is to convert a user's natural language news request
+    into a valid SerpApi request parameter JSON.
+
+    You MUST follow these rules strictly:
+
+    1. You are NOT allowed to answer the user's question directly.
+    2. You MUST output ONLY a single JSON object.
+    3. Do NOT include explanations, comments, markdown, or extra text.
+    4. Do NOT guess arbitrary information.
+    5. If some optional parameters cannot be determined, omit them.
+    6. Always produce a minimal valid request.
+
+    You are using the Google News API via SerpApi.
+
+    ────────────────────────
+    Required parameters (CRITICAL)
+    ────────────────────────
+    - engine: must ALWAYS be "google_news"
+
+    ────────────────────────
+    Optional parameters
+    ────────────────────────
+    - q: query text
+      - If the user clearly specifies a topic/company/keyword, include q.
+      - If the user only asks for "오늘 주요 뉴스/헤드라인", you may omit q.
+
+    - gl: two-letter country code (e.g., "us", "kr")
+      Use ONLY if the user explicitly mentions a country/region.
+
+    - hl: language code (e.g., "en", "ko")
+      Use ONLY if the user explicitly mentions a language.
+
+    example
+    {
+      "engine": "google_news",
+      "q": "AI"
+    }
