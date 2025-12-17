@@ -8,15 +8,14 @@ class NewsAPIError(Exception):
 
 def fetch_news(params: dict) -> dict:
     try:
-        return fetch_from_api(engine="google_news", params=params)
+        return fetch_from_api(engine="google_news_light", params=params)
     except SerpAPIError as e:
         raise NewsAPIError(str(e)) from e
 
 
 def format_news_result(
     result: Dict,
-    min_days: int = 1,
-    max_days: int = 3,
+    max_days: int = 2,
 ) -> List[Dict[str, str]]:
 
     news_results = result.get("news_results", [])
@@ -25,17 +24,24 @@ def format_news_result(
     for item in news_results:
         date_str = item.get("date", "").lower()
 
-        # "X day ago" 패턴 파싱
-        match = re.search(r"(\d+)\s+day", date_str)
-        if not match:
+        if re.search(r"\b\d+\s+(minute|minutes|min|mins|hour|hours)\b", date_str):
+            filtered_news.append(
+                {
+                    "headline": item.get("title", ""),
+                    "snippet": item.get("snippet", ""),
+                }
+            )
             continue
 
-        days_ago = int(match.group(1))
-
-        if min_days <= days_ago <= max_days:
-            filtered_news.append({
-                "headline": item.get("title", ""),
-                "snippet": item.get("snippet", ""),
-            })
+        match = re.search(r"\b(\d+)\s+day", date_str)
+        if match:
+            days_ago = int(match.group(1))
+            if days_ago <= max_days:
+                filtered_news.append(
+                    {
+                        "headline": item.get("title", ""),
+                        "snippet": item.get("snippet", ""),
+                    }
+                )
 
     return filtered_news

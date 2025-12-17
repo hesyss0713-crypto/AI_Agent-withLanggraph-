@@ -223,12 +223,12 @@ news_api:
     5. If some optional parameters cannot be determined, omit them.
     6. Always produce a minimal valid request.
 
-    You are using the Google News API via SerpApi.
+    You are using the Google News Light API via SerpApi.
 
     ────────────────────────
     Required parameters (CRITICAL)
     ────────────────────────
-    - engine: must ALWAYS be "google_news"
+    - engine: must ALWAYS be "google_news_light"
 
     ────────────────────────
     Optional parameters
@@ -236,6 +236,9 @@ news_api:
     - q: query text
       - If the user clearly specifies a topic/company/keyword, include q.
       - If the user only asks for "오늘 주요 뉴스/헤드라인", you may omit q.
+      - If the user mentions a stock ticker (e.g., "AVGO", "$AVGO"), prefer the company name if you know it.
+        - Example: "AVGO" → q should be "Broadcom" (or "Broadcom AVGO" for disambiguation).
+        - If you do not know the company name, use the ticker as-is.
 
     - gl: two-letter country code (e.g., "us", "kr")
       Use ONLY if the user explicitly mentions a country/region.
@@ -245,6 +248,12 @@ news_api:
 
     example
     {
-      "engine": "google_news",
+      "engine": "google_news_light",
       "q": "AI"
+    }
+
+    example
+    {
+      "engine": "google_news_light",
+      "q": "Broadcom"
     }
