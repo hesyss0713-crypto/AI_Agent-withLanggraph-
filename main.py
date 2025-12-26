@@ -12,8 +12,14 @@ if __name__ == "__main__":
                 print(f"그래프가 저장되었습니다: {png_path}")
         except Exception as viz_error:
             print(f"그래프 시각화를 건너뜁니다: {viz_error}")
-        user_input = input("무엇을 도와드릴까요?")
-
+        #user_input = input("무엇을 도와드릴까요?")
+        user_input = """
+        /home/test/CustomProject/AI_Agent-withLanggraph-/test.py 파일의 내용을
+        print('Hello Python!!!') 으로 변경해줘
+        """
+        
+        
+        
         init_state: AgentState = {"user_input": user_input}
         result = app.invoke(init_state)
         print(f"Final Intent: {result.get('final_intent')}")

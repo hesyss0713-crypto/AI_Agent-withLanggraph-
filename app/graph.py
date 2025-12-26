@@ -35,7 +35,7 @@ def build_app(model_id: str = "meta-llama/Llama-3.2-3B-Instruct"):
     }
     graph.add_node("web_agent", make_web_agent(run_llm, get_prompt, web_handlers))
     graph.add_node("policy_agent", policy_agent)
-    graph.add_node("code_agent", code_agent)
+    graph.add_node("code_agent", code_agent(run_llm, get_prompt))
 
     # 간선
     graph.add_edge("source_router", "agg_router")
